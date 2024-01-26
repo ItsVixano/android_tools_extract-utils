@@ -60,9 +60,7 @@ function setup_vendor_deps() {
         exit 1
     fi
 
-    export BINARIES_LOCATION="$ANDROID_ROOT"/prebuilts/extract-tools/${HOST}-x86/bin
-    export CLANG_BINUTILS="$ANDROID_ROOT"/prebuilts/clang/host/${HOST}-x86/llvm-binutils-stable
-    export JDK_BINARIES_LOCATION="$ANDROID_ROOT"/prebuilts/jdk/jdk21/${HOST}-x86/bin
+    export BINARIES_LOCATION="$ANDROID_ROOT"/prebuilts/extract-tools/${HOST}-aarch64/bin
     export COMMON_BINARIES_LOCATION="$ANDROID_ROOT"/prebuilts/extract-tools/common
 
     export SIMG2IMG="$BINARIES_LOCATION"/simg2img
@@ -70,8 +68,8 @@ function setup_vendor_deps() {
     export OTA_EXTRACTOR="$BINARIES_LOCATION"/ota_extractor
     export SIGSCAN="$BINARIES_LOCATION"/SigScan
     export STRIPZIP="$BINARIES_LOCATION"/stripzip
-    export OBJDUMP="$CLANG_BINUTILS"/llvm-objdump
-    export JAVA="$JDK_BINARIES_LOCATION"/java
+    export OBJDUMP=llvm-objdump
+    export JAVA=java
     export APKTOOL="$COMMON_BINARIES_LOCATION"/apktool/apktool.jar
 
     for VERSION in 0_8 0_9 0_17_2; do
@@ -1780,7 +1778,7 @@ function apktool_patch() {
     local PATCHES_PATHS=$(find "$PATCHES_PATH" -name "*.patch" | sort)
 
     local TEMP_DIR=$(mktemp -dp "$EXTRACT_TMP_DIR")
-    "$JAVA" -jar "$APKTOOL" d "$APK_PATH" -o "$TEMP_DIR" -f "$@"
+    "$JAVA" -jar "$APKTOOL" d "$APK_PATH" -o "$TEMP_DIR" -f -r "$@"
 
     while IFS= read -r PATCH_PATH; do
         echo "Applying patch $PATCH_PATH"
